@@ -17,7 +17,7 @@ if(args.length <= 3){
 	process.exit();
 }
 
-const split = args[2];
+let split = args[2];
 if(split < 2){
 	console.log(`\n ${yellow}[${white}!${yellow}] INFO${white}: lawak dek? split 1 file maksudnya gimana? >:(`);
 	console.log(`\n ${cyan}[${white}+${cyan}] Cara penggunaan${white}: node spliter.js {jumlah_hasil_file} {nama_file}`);
@@ -82,12 +82,11 @@ try{
 		}
 
 		/* BUG */
-		for(let i=split+1; i<=split+1; i++){
-			for(let j=(formula-temp+1)*(i-1); j<((formula-temp+1)*i); j++){
-				fs.appendFile(`result/${filename[0]}.sisa.${filename[1]}`, `${array[j]}\n`, function (err) {
-					if(err) throw err;
-				});
-			}
+		let i = Number(split) + Number(1);
+		for(j=formula*(i-1); j<formula*(i-1)+temp; j++){
+			fs.appendFile(`result/${filename[0]}_${i}.${filename[1]}`, `${array[j]}\n`, function (err) {
+				if(err) throw err;
+			});
 		}
 	}
 
