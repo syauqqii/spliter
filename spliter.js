@@ -52,15 +52,9 @@ try{
 
 		for(let i=1; i<=split; i++){
 			for(let j=formula*(i-1); j<(formula*i); j++){
-				if(j==(formula*i)-1){
-					fs.appendFile(`result/${filename[0]}_${i}.${filename[1]}`, `${array[j]}`, function (err) {
-						if(err) throw err;
-					});
-				} else{
-					fs.appendFile(`result/${filename[0]}_${i}.${filename[1]}`, `${array[j]}\n`, function (err) {
-						if(err) throw err;
-					});
-				}
+				fs.appendFile(`result/${filename[0]}_${i}.${filename[1]}`, `${array[j]}\n`, function (err) {
+					if(err) throw err;
+				});
 			}
 		}
 	} else{
@@ -69,15 +63,9 @@ try{
 
 		for(let i=1; i<=split; i++){
 			for(let j=formula*(i-1); j<(formula*i); j++){
-				if(j==(formula*i)-1){
-					fs.appendFile(`result/${filename[0]}_${i}.${filename[1]}`, `${array[j]}`, function (err) {
-						if(err) throw err;
-					});
-				} else{
-					fs.appendFile(`result/${filename[0]}_${i}.${filename[1]}`, `${array[j]}\n`, function (err) {
-						if(err) throw err;
-					});
-				}
+				fs.appendFile(`result/${filename[0]}_${i}.${filename[1]}`, `${array[j]}\n`, function (err) {
+					if(err) throw err;
+				});
 			}
 		}
 
