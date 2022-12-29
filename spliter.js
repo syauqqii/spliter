@@ -36,6 +36,10 @@ try {
 	}
 } catch (err) {
 	console.error(err);
+	console.log(`\n ${red}[${white}!${red}] ERROR${white}: tidak dapat membuat folder 'result', silahkan buat manual!`);
+	console.log(`\n ${cyan}[${white}+${cyan}] Cara penggunaan${white}: node spliter.js {jumlah_hasil_file} {nama_file}`);
+	console.log(`          ${cyan}Contoh    ${white}: node spliter.js 5 data.txt`);
+	process.exit();
 }
 
 try{
