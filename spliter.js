@@ -84,7 +84,7 @@ try{
 		/* BUG */
 		let i = Number(split) + Number(1);
 		for(j=formula*(i-1); j<formula*(i-1)+temp; j++){
-			fs.appendFile(`result/${filename[0]}_${i}.${filename[1]}`, `${array[j]}\n`, function (err) {
+			fs.appendFile(`result/${filename[0]}.sisa.${filename[1]}`, `${array[j]}\n`, function (err) {
 				if(err) throw err;
 			});
 		}
