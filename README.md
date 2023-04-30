@@ -1,4 +1,4 @@
-# Splitter File
+## Splitter File
 
 Program ini bertujuan untuk memecahkan beberapa file (khusus .txt),
 yang memiliki banyak baris menjadi beberapa file.. contohnya :
