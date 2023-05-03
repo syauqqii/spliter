@@ -18,7 +18,7 @@ if(args.length <= 3){
 }
 let split = args[2];
 if(split < 2){
-	console.log(`\n ${yellow}[${white}!${yellow}] INFO${white}: lawak dek? split 1 file maksudnya gimana? >:(`);
+	console.log(`\n ${yellow}[${white}!${yellow}] INFO${white}: minimal hasil file yang ingin di split berjumlah 2`);
 	console.log(`\n ${cyan}[${white}+${cyan}] Cara penggunaan${white}: node spliter.js {jumlah_hasil_file} {nama_file}`);
 	console.log(`          ${cyan}Contoh    ${white}: node spliter.js 5 data.txt`);
 	process.exit();
