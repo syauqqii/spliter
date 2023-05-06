@@ -4,13 +4,16 @@
  *    tergantung jumlah yang anda inputkan didalam split file.
  */
 
+const fs = require("fs");
+const folderName = 'result';
+const args = process.argv;
+
 const red    = "\x1b[31m";
 const yellow = "\x1b[33m";
 const green  = "\x1b[32m";
 const cyan   = "\x1b[36m";
 const white  = "\x1b[37m";
 
-const args = process.argv;
 if(args.length <= 3){
 	console.log(`\n ${cyan}[${white}+${cyan}] Cara penggunaan${white}:${white} node spliter.js {jumlah_hasil_file} {nama_file}`);
 	console.log(`          ${cyan}Contoh    ${white}: node spliter.js 5 data.txt`);
@@ -24,9 +27,6 @@ if(split < 2){
 	process.exit();
 }
 const filename   = args[3].split(".");
-const folderName = 'result';
-
-const fs = require("fs");
 
 try {
 	if (!fs.existsSync(folderName)) {
