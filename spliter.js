@@ -5,75 +5,71 @@
  */
 
 const fs = require("fs");
-const folderName = 'result';
+const path = require("path");
+
+const red = "\x1b[31m";
+const yellow = "\x1b[33m";
+const green = "\x1b[32m";
+const cyan = "\x1b[36m";
+const white = "\x1b[37m";
+
 const args = process.argv;
 
-const red    = "\x1b[31m";
-const yellow = "\x1b[33m";
-const green  = "\x1b[32m";
-const cyan   = "\x1b[36m";
-const white  = "\x1b[37m";
+if (args.length !== 4) {
+  console.log(`\n ${cyan}[${white}+${cyan}] Cara penggunaan${white}: node spliter.js {jumlah_hasil_file} {nama_file}`);
+  console.log(`          ${cyan}Contoh    ${white}: node spliter.js 5 data.txt`);
+  process.exit(1);
+}
 
-if(args.length <= 3){
-	console.log(`\n ${cyan}[${white}+${cyan}] Cara penggunaan${white}:${white} node spliter.js {jumlah_hasil_file} {nama_file}`);
-	console.log(`          ${cyan}Contoh    ${white}: node spliter.js 5 data.txt`);
-	process.exit();
+const split = parseInt(args[2]);
+
+if (isNaN(split) || split < 2) {
+  console.log(`\n ${yellow}[${white}!${yellow}] INFO${white}: Harap masukkan jumlah hasil file yang valid (minimal 2)! >:(`);
+  console.log(`\n ${cyan}[${white}+${cyan}] Cara penggunaan${white}: node spliter.js {jumlah_hasil_file} {nama_file}`);
+  console.log(`          ${cyan}Contoh    ${white}: node spliter.js 5 data.txt`);
+  process.exit(1);
 }
-let split = args[2];
-if(split < 2){
-	console.log(`\n ${yellow}[${white}!${yellow}] INFO${white}: minimal hasil file yang ingin di split berjumlah 2`);
-	console.log(`\n ${cyan}[${white}+${cyan}] Cara penggunaan${white}: node spliter.js {jumlah_hasil_file} {nama_file}`);
-	console.log(`          ${cyan}Contoh    ${white}: node spliter.js 5 data.txt`);
-	process.exit();
-}
-const filename   = args[3].split(".");
+
+const inputFileName = args[3];
+const folderName = "result";
 
 try {
-	if (!fs.existsSync(folderName)) {
-		fs.mkdirSync(folderName);
-	}
+  if (!fs.existsSync(folderName)) {
+    fs.mkdirSync(folderName);
+    console.log(`\n ${green}[${white}+${green}] SUKSES${white}: Folder 'result' berhasil dibuat.`);
+  }
 } catch (err) {
-	console.error(err);
-	console.log(`\n ${red}[${white}!${red}] ERROR${white}: tidak dapat membuat folder 'result', silahkan buat secara manual!`);
-	console.log(`\n ${cyan}[${white}+${cyan}] Cara penggunaan${white}: node spliter.js {jumlah_hasil_file} {nama_file}`);
-	console.log(`          ${cyan}Contoh    ${white}: node spliter.js 5 data.txt`);
-	process.exit();
+  console.error(err);
+  console.log(`\n ${red}[${white}!${red}] ERROR${white}: Tidak dapat membuat folder 'result', silahkan buat manual!`);
+  console.log(`\n ${cyan}[${white}+${cyan}] Cara penggunaan${white}: node spliter.js {jumlah_hasil_file} {nama_file}`);
+  console.log(`          ${cyan}Contoh    ${white}: node spliter.js 5 data.txt`);
+  process.exit(1);
 }
 
-try{
-	const contents = fs.readFileSync(`${filename[0]}.${filename[1]}`, "utf-8");
-	const array    = contents.split(/\r?\n/);
-	const lines    = array.length;
-	if(lines % split == 0){
-		let formula  = lines / split;
-		for(let i=1; i<=split; i++){
-			for(let j=formula*(i-1); j<(formula*i); j++){
-				fs.appendFile(`result/${filename[0]}_${i}.${filename[1]}`, `${array[j]}\n`, function (err) {
-					if(err) throw err;
-				});
-			}
-		}
-	} else{
-		let temp    = lines % split;
-		let formula = (lines-temp) / split;
-		for(let i=1; i<=split; i++){
-			for(let j=formula*(i-1); j<(formula*i); j++){
-				fs.appendFile(`result/${filename[0]}_${i}.${filename[1]}`, `${array[j]}\n`, function (err) {
-					if(err) throw err;
-				});
-			}
-		}
-		let i = Number(split) + Number(1);
-		for(j=formula*(i-1); j<formula*(i-1)+temp; j++){
-			fs.appendFile(`result/${filename[0]}.sisa.${filename[1]}`, `${array[j]}\n`, function (err) {
-				if(err) throw err;
-			});
-		}
-	}
-	console.log(`\n ${green}[${white}+${green}] SUKSES${white}: file '${filename[0]}.${filename[1]}' berhasil displit menjadi '${split}' file!`);
-} catch(err){
-	console.log(`\n ${red}[${white}!${red}] ERROR${white}: file '${filename[0]}.${filename[1]}' tidak ditemukan!! >:(`);
-	console.log(`\n ${cyan}[${white}+${cyan}] Cara penggunaan${white}: node spliter.js {jumlah_hasil_file} {nama_file}`);
-	console.log(`          ${cyan}Contoh    ${white}: node spliter.js 5 data.txt`);
-	process.exit();
+try {
+  const fileContent = fs.readFileSync(inputFileName, "utf-8");
+  const lines = fileContent.split(/\r?\n/);
+  const totalLines = lines.length;
+
+  if (totalLines === 0) {
+    console.log(`\n ${yellow}[${white}!${yellow}] INFO${white}: File '${inputFileName}' kosong. Tidak ada yang bisa di-split.`);
+    process.exit(1);
+  }
+
+  const chunkSize = Math.ceil(totalLines / split);
+
+  for (let i = 0; i < split; i++) {
+    const start = i * chunkSize;
+    const end = (i + 1) * chunkSize;
+    const outputFile = path.join(folderName, `${path.basename(inputFileName, path.extname(inputFileName))}_${i + 1}${path.extname(inputFileName)}`);
+    const chunk = lines.slice(start, end).join("\n");
+
+    fs.writeFileSync(outputFile, chunk);
+    console.log(`\n ${green}[${white}+${green}] SUKSES${white}: File '${outputFile}' berhasil dibuat.`);
+  }
+
+  console.log(`\n ${green}[${white}+${green}] SUKSES${white}: File '${inputFileName}' berhasil displit menjadi '${split}' file!`);
+} catch (err) {
+  console.log(`\n ${red}[${white}!${red}] ERROR${white}: ${err.message}`);
+  process.exit(1);
 }
